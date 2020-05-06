@@ -23,6 +23,7 @@ public class GameEngine
 	private int turnCount=0;
     // the column that was last clicked by a user
     protected Move lastColumnClicked = null;
+    protected Move lastCalumnAI = null;
 
     /**
      * Denotes the different ways the board (or 2d array) can be searched from a given position.
@@ -83,7 +84,12 @@ public class GameEngine
     public boolean putDisc(Move move) throws OutsideBoardException
     {
         if (board.putDisc(currentPlayer.getNum(), move.getPositionIndx())) {
-            lastColumnClicked = move;
+
+        	if(isCurrentPlayerAI()){
+            	lastCalumnAI = move;
+            }
+            
+            	lastColumnClicked = move;
             
             nextTurn();
             return true;
@@ -401,6 +407,9 @@ public class GameEngine
 	}
 	protected int getLastColClicked(){
 		return lastColumnClicked.getPositionIndx();
+	}
+	protected int getLastColAI(){
+		return lastCalumnAI.getPositionIndx();
 	}
 /*-----------END CLASS GameEngine-----------*/	
 }

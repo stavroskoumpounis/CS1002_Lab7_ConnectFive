@@ -17,7 +17,7 @@ public class Move
     /**
      * Where is the move taking place?
      * Get the index of the position
-     * @return position
+     * @return move position
      */
     public int getPositionIndx()
     {

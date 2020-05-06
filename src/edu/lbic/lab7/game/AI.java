@@ -9,6 +9,7 @@ public class AI extends GameEngine{
 	private static Player p1,AI;
 	private GUI gui;
 	private int lastMoveColumn,lastMoveRow;
+	private int playerNum;
 	
 	protected AI(GUI gui){
 		super(p1, AI);
@@ -16,14 +17,24 @@ public class AI extends GameEngine{
 		
 	}
 
-	public boolean avoidFive() throws OutsideBoardException{
+	public boolean avoidFive(int playerNum) throws OutsideBoardException{
+		this.playerNum=playerNum;
 		
-		lastMoveColumn = engine.getLastColClicked();
+		if (playerNum==1){
+			lastMoveColumn = engine.getLastColClicked();
+		}
+		else{
+			lastMoveColumn = engine.getLastColAI();
+		}
+		
+		
 		try {
 			lastMoveRow = board.getROWS() - board.getColumnHeight(lastMoveColumn);
 		} catch (OutsideBoardException e) {
 			e.printStackTrace();
 		}
+		
+		
 		//search.Down , search.left col,row diagonal
 		if (threatCheck(SearchNode.LEFT, SearchNode.DOWN, "diagonal")){
 			return true;
@@ -102,36 +113,65 @@ public class AI extends GameEngine{
 	}
 	private boolean paternCheck(String count0,int colCheck,int rowCheck,String searchMode) throws OutsideBoardException{
 		System.out.println("count0 :"+count0);
-		
+
 		String[] pat = count0.split("");
-        
+
 		for (int i = 0; i < pat.length; i++) {
 			System.out.print("pat["+i+"] "+pat[i]+" ");
 		}
 		System.out.println();
-        if (count0.contains("11110")){ //check for patterns
-        	placeDisc(pat, colCheck, rowCheck, 4,"11110", searchMode);
-        	return true;
-        }
-        else if (count0.contains("11101")){
-        	placeDisc(pat, colCheck, rowCheck, 3,"11101", searchMode);
-        	return true;
-        }
-        else if (count0.contains("11011")){
-        	placeDisc(pat, colCheck, rowCheck, 2,"11011", searchMode);
-        	return true;
-        }
-        else if (count0.contains("10111")){
-        	placeDisc(pat, colCheck, rowCheck, 1,"10111", searchMode);
-        	return true;
-        }
-        else if (count0.contains("01111")){
-        	placeDisc(pat, colCheck, rowCheck, 0,"01111", searchMode);
-        	return true;
-        }
-        else{
-        	return false;
-        }
+		if (playerNum==1){
+			if (count0.contains("11110")){ //check for patterns
+				placeDisc(pat, colCheck, rowCheck, 4,"11110", searchMode);
+				return true;
+			}
+			else if (count0.contains("11101")){
+				placeDisc(pat, colCheck, rowCheck, 3,"11101", searchMode);
+				return true;
+			}
+			else if (count0.contains("11011")){
+				placeDisc(pat, colCheck, rowCheck, 2,"11011", searchMode);
+				return true;
+			}
+			else if (count0.contains("10111")){
+				placeDisc(pat, colCheck, rowCheck, 1,"10111", searchMode);
+				return true;
+			}
+			else if (count0.contains("01111")){
+				placeDisc(pat, colCheck, rowCheck, 0,"01111", searchMode);
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		else
+		{
+			System.out.println();
+			if (count0.contains("22220")){ //check for patterns
+				placeDisc(pat, colCheck, rowCheck, 4,"22220", searchMode);
+				return true;
+			}
+			else if (count0.contains("22202")){
+				placeDisc(pat, colCheck, rowCheck, 3,"22202", searchMode);
+				return true;
+			}
+			else if (count0.contains("22022")){
+				placeDisc(pat, colCheck, rowCheck, 2,"22022", searchMode);
+				return true;
+			}
+			else if (count0.contains("20222")){
+				placeDisc(pat, colCheck, rowCheck, 1,"20222", searchMode);
+				return true;
+			}
+			else if (count0.contains("02222")){
+				placeDisc(pat, colCheck, rowCheck, 0,"02222", searchMode);
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 	}
 	private void placeDisc(String[] pat,int col,int row ,int pos, String patern,String searchMode) throws OutsideBoardException{
 		for (int i = 0; i < pat.length; i++) {

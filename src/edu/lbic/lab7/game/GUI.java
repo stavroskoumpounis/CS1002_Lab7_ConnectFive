@@ -101,11 +101,8 @@ public class GUI extends MouseAdapter
 		JMenuItem load1Item = new JMenuItem("Load Slot 1");
 		JMenuItem load2Item = new JMenuItem("Load Slot 2");
 		
-		
 		resetItem.addActionListener(new MainMenu(frame,this));
 		exitItem.addActionListener(new MainMenu(frame, this));
-		
-		
 		
 		save1Item.addActionListener(new MainMenu(frame,this));
 		save2Item.addActionListener(new MainMenu(frame,this));
@@ -181,22 +178,22 @@ public class GUI extends MouseAdapter
 		updateTurnText(engine.getCurrentPlayer());
 	}
 	public void playSaound(){
-	
+
 		Synthesizer synth;
 		try {
 			synth = MidiSystem.getSynthesizer();
-			 synth.open();
-		 MidiChannel[] mc = synth.getChannels();
-		 Instrument[] instr = synth.getDefaultSoundbank().getInstruments();
+			synth.open();
+			MidiChannel[] mc = synth.getChannels();
+			Instrument[] instr = synth.getDefaultSoundbank().getInstruments();
 
-		 synth.loadInstrument(instr[90]);
-		                     
+			synth.loadInstrument(instr[90]);
 
-		mc[9].noteOn(60,300);
+
+			mc[9].noteOn(60,300);
 		} catch (MidiUnavailableException e) {
 			e.printStackTrace();
 		};
-		
+
 	}
 	public void updateScoreText()
 	{
@@ -268,7 +265,7 @@ public class GUI extends MouseAdapter
 				/*AI's move*/
 				if(engine.getTurnCount()>0){ // bug handling
 					
-					if(!ai.avoidFive()){ //if avoid five didn't happen move randomly
+					if(!ai.avoidFive(2) && !ai.avoidFive(1)){ //if avoid five didn't happen move randomly
 						randomMoveAR(-1);
 					}
 				}
@@ -404,27 +401,17 @@ public class GUI extends MouseAdapter
 	}
 	private void placeAIdisc(int notThere){
 		int randomColumn;
+
+		ArrayList<Integer> possible=engine.board.availableNodesTopRow();
+		System.out.println(possible);
 		while(true){
-			/*if not the game reaches the top row , valid column options are less than 8
-			 *so this if attempts to get the possible/valid column choices for the end of the game */
-			if (engine.getTurnCount()<49){
-				randomColumn = randomizer.nextInt(engine.getCOLUMNS());
-			}
-			else{
-				ArrayList<Integer> possible=engine.board.availableNodesTopRow();
-				while(true){
-					randomColumn = possible.get(randomizer.nextInt(possible.size()));
-					if(notThere!=-1){
-						if (randomColumn != notThere){
-							break;
-						}
-						else{
-							break;
-						}
-					}
+			randomColumn = possible.get(randomizer.nextInt(possible.size()));
+			System.out.println("\n"+randomColumn);
+			if(notThere!=-1){
+				if (randomColumn != notThere){
+					break;
 				}
 			}
-
 			try {
 				if (putDisc(randomColumn)){
 					break;
@@ -433,7 +420,6 @@ public class GUI extends MouseAdapter
 				e.printStackTrace();
 			}
 		}
-
 	}
 /*-----------END CLASS GUI-----------*/	
 }
